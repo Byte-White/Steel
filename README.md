@@ -41,8 +41,8 @@ void OnUIRender() override
 {
 ImGui::Begin("Hello");
 APPAZOID_INFO("Hello World");
-Button("mybutton");
-if(Button("click me"))
+ImGui::Button("mybutton");
+if(ImGui::Button("click me"))
 {<cpp code>}
         
 ImGui::End();

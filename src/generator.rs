@@ -74,7 +74,7 @@ impl Generator{
 
                 if args.text.contains('{') == false
                 {
-                    self.code.push_str(&format!("Button({});\n", args.text));
+                    self.code.push_str(&format!("ImGui::Button({});\n", args.text));
                     //println!("--------------args: {}",args.text);
                 }
                 else 
@@ -96,7 +96,7 @@ impl Generator{
                     if let Some(captures) = re.captures(&args.text) {
                         if let Some(buttonname) = captures.get(0) {
                             println!("~-~-~-~-~---{0}",buttonname.as_str());
-                            self.code.push_str(&format!("if(Button({0}))\n{1}\n", buttonname.as_str(),string_text));
+                            self.code.push_str(&format!("if(ImGui::Button({0}))\n{1}\n", buttonname.as_str(),string_text));
                         }
                         else {
                             println!("ERROR! REGEX error, no button pressed event");
