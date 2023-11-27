@@ -17,12 +17,36 @@ You should have Rust installed.
 `cargo run file.st`
 file.st:
 ```cpp
-window("Hello");
-
-loginfo("Hello World");
-
-button("mybutton");
+layer("MyFirstLayer");
+    window("Hello");
+        loginfo("Hello World");
+        button("mybutton");
+        button("click me" 
+        {<cpp code>}
+        );
+        exit 0;
+    endwindow()
+endlayer()
 exit 0;
 ```
 
 this will generate a file named `az_compiled.h`
+
+```cpp
+class MyFirstLayer : public az::Layer
+{
+public:
+
+void OnUIRender() override
+{
+ImGui::Begin("Hello");
+APPAZOID_INFO("Hello World");
+Button("mybutton");
+if(Button("click me"))
+{<cpp code>}
+        
+ImGui::End();
+}
+};
+
+```

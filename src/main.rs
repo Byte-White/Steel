@@ -9,6 +9,7 @@ use lexer::Lexer;
 use parser::Parser;
 use generator::Generator;
 
+//flags: --test-src --test-tokens --test-parser
 fn main() {
     let args: Vec<String> = env::args().collect();
     if args.len()<2 {

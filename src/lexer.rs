@@ -9,7 +9,10 @@ pub enum TokenType {
     Exit,
     Log,
     Semicolon,
+    Layer,
+    EndLayer,
     Window,
+    EndWindow,
     Button,
     Text,
     ColorPicker,
@@ -65,7 +68,33 @@ impl Lexer {
                     tokentype: TokenType::Number(number_value),
                     text: number_text,
                 });
-            } else if current_char == '"' {
+            } 
+            else if current_char == '('
+            {
+                self.index += 1;
+                let mut numofbrackets = 0;//used to handle nested brackets
+                let start = self.index;
+                while self.peek() != ')' && numofbrackets == 0
+                {
+                    if self.peek() == '('
+                    {
+                        numofbrackets += 1;
+                    }
+                    else if(self.peek() == ')')
+                    {
+                        numofbrackets -= 1;
+                    }
+
+                    self.index += 1;
+                }
+                let string_text = self.source[start..self.index].to_string();
+                self.index += 1; // skip closing ')';
+                self.tokenlist.push(Token{
+                    tokentype: TokenType::Arguments(string_text.clone()),
+                    text: string_text,
+                });
+            } 
+            else if current_char == '"' {
                 // Lex a string
                 self.index += 1;// Skip the opening quote
                 let start = self.index;
@@ -79,21 +108,6 @@ impl Lexer {
                     text: string_text,
                 });
             }
-            else if current_char == '('
-            {
-                self.index += 1;
-                let start = self.index;
-                while self.peek() != ')'
-                {
-                    self.index += 1;
-                }
-                let string_text = self.source[start..self.index].to_string();
-                self.index += 1; // skip closing ')';
-                self.tokenlist.push(Token{
-                    tokentype: TokenType::Arguments(string_text.clone()),
-                    text: string_text,
-                });
-            } 
             else {
                 // Lex other tokens
                 let start = self.index;
@@ -110,6 +124,9 @@ impl Lexer {
                     "logcritical" => TokenType::Log,
                     ";" => TokenType::Semicolon,
                     "window" => TokenType::Window,
+                    "endwindow" => TokenType::EndWindow,
+                    "layer" => TokenType::Layer,
+                    "endlayer" => TokenType::EndLayer,
                     "button" => TokenType::Button,
                     "text" => TokenType::Text,
                     "colorpicker" => TokenType::ColorPicker,

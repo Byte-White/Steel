@@ -58,6 +58,47 @@ impl Parser {
                 }
                 self.consume();
             }
+
+            TokenType::EndWindow => {
+                self.consume(); // Consume 'endwindow'
+                if self.debug_print{
+                print!("Parsed 'endwindow' statement ");
+                }
+                    self.generator.compile_line( self.tokenlist[self.index-1].clone(),self.tokenlist[self.index].clone());                
+            }
+
+            
+            TokenType::Layer => {
+                self.consume(); // Consume 'window'
+                if self.debug_print{
+                print!("Parsed 'layer' statement ");
+                }
+                // Implement logic to handle 'return' statement
+                if let TokenType::Arguments(arg_value) = &self.peek().tokentype {
+                    // Use arg_value, which is a reference to the associated String
+                    if self.debug_print{
+                    println!("with Arguments : {}", arg_value);
+                    }
+                    // generates code.
+                    self.generator.compile_line( self.tokenlist[self.index-1].clone(),self.tokenlist[self.index].clone());
+
+                } else {
+                    // Handle the case when TokenType is not Arguments
+                    eprintln!("error! : no arguments for 'layer' statement");
+                    process::exit(1);
+                }
+                self.consume();
+            }
+
+            TokenType::EndLayer => {
+                self.consume(); // Consume 'endlayer'
+                if self.debug_print{
+                print!("Parsed 'endlayer' statement ");
+                }
+                    self.generator.compile_line( self.tokenlist[self.index-1].clone(),self.tokenlist[self.index].clone());                
+            }
+
+
             TokenType::Log => {
                 self.consume(); // Consume 'loginfo', 'logwarn', or 'logcritical'
                 // Implement logic to handle 'log' statement
